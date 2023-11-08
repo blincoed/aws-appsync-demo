@@ -1,0 +1,29 @@
+type Cause {
+  id: Int!
+}
+
+type Response {
+  status: Int
+  data: Cause
+}
+
+type Project {
+  body: Response
+}
+
+input CreateProjectInput {
+  name: String!
+}
+
+type Query {
+  getProjects: Project
+}
+
+type Mutation {
+  createProject(input: CreateProjectInput): Project
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
