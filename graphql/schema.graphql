@@ -2,25 +2,16 @@ type Cause {
   id: Int!
 }
 
-type Response {
-  status: Int
-  data: Cause
-}
-
-type Project {
-  body: Response
-}
-
 input CreateProjectInput {
   name: String!
 }
 
 type Query {
-  getProjects: Project
+  getProjects: Cause
 }
 
 type Mutation {
-  createProject(input: CreateProjectInput): Project
+  createProject(input: CreateProjectInput): Cause
 }
 
 schema {

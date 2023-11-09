@@ -87,7 +87,7 @@ Resources:
       Type: HTTP
       ServiceRoleArn: !GetAtt AppSyncServiceRole.Arn
       HttpConfig:
-        Endpoint: "https://b38e-2600-1702-cc4-2c00-b46b-572-cbec-e430.ngrok-free.app"
+        Endpoint: "https://c0ae-2600-1702-cc4-2c00-748c-2fc4-2ce9-cd1e.ngrok-free.app"
   # Resolvers
   createProjectResolver:
     Type: AWS::AppSync::Resolver
@@ -104,9 +104,27 @@ Resources:
       ApiId: !GetAtt GraphQLApi.ApiId
       FieldName: getProjects
       TypeName: Query
+      Code: |
+        export function request(){
+          return{
+            version: "2018-05-29", 
+            method: "GET", 
+            params: { 
+              headers: { "Content-Type": "application/json" } 
+            }, 
+            "resourcePath": "/api/v4/public/causes2/dca235f9a32c43ada54cd10baf1c2a82"
+          }
+        }
+
+        export function response(ctx){
+          const result = JSON.parse(ctx.result.body)
+          console.log('RESPONSE', result.data)
+          return result.data
+        }
+      Runtime:
+        Name: APPSYNC_JS
+        RuntimeVersion: "1.0.0"
       DataSourceName: !GetAtt getProjectsDataSource.Name
-      RequestMappingTemplate: '{ "version": "2018-05-29", "method": "GET", "params": { "headers": { "Content-Type": "application/json" } }, "resourcePath": "/api/v4/public/causes2/dca235f9a32c43ada54cd10baf1c2a82" }'
-      ResponseMappingTemplate: $util.toJson($ctx.result)
 
 Outputs:
   ApiUrl:
