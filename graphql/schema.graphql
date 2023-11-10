@@ -7,7 +7,7 @@ input CreateProjectInput {
 }
 
 type Query {
-  getProjects: Cause
+  getProjects(causeId: String!): Cause
 }
 
 type Mutation {

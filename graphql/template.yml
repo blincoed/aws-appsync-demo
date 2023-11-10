@@ -87,7 +87,7 @@ Resources:
       Type: HTTP
       ServiceRoleArn: !GetAtt AppSyncServiceRole.Arn
       HttpConfig:
-        Endpoint: "https://c0ae-2600-1702-cc4-2c00-748c-2fc4-2ce9-cd1e.ngrok-free.app"
+        Endpoint: "https://a212-2600-1702-cc4-2c00-748c-2fc4-2ce9-cd1e.ngrok-free.app"
   # Resolvers
   createProjectResolver:
     Type: AWS::AppSync::Resolver
@@ -105,20 +105,19 @@ Resources:
       FieldName: getProjects
       TypeName: Query
       Code: |
-        export function request(){
+        export function request(ctx){
           return{
             version: "2018-05-29", 
             method: "GET", 
             params: { 
-              headers: { "Content-Type": "application/json" } 
+              headers: { "Content-Type": "application/json", "external-api-key": ctx.request.headers['x-api-key']} 
             }, 
-            "resourcePath": "/api/v4/public/causes2/dca235f9a32c43ada54cd10baf1c2a82"
+            "resourcePath": `/api/v4/public/causes2/${ctx.args.causeId}`
           }
         }
 
         export function response(ctx){
           const result = JSON.parse(ctx.result.body)
-          console.log('RESPONSE', result.data)
           return result.data
         }
       Runtime:
