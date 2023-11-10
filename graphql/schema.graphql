@@ -2,17 +2,11 @@ type Cause {
   id: Int!
 }
 
-input CreateProjectInput {
-  name: String!
-}
-
 type Query {
-  getProjects(causeId: String!): Cause
+  getCauses(causeId: String!): Cause
 }
 
-type Mutation {
-  createProject(input: CreateProjectInput): Cause
-}
+type Mutation {}
 
 schema {
   query: Query

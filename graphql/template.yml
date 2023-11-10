@@ -58,51 +58,22 @@ Resources:
                 Action: lambda:invokeFunction
                 Resource:
                   - !Sub "arn:aws:lambda:${AWS::Region}:*:*"
-  # Lambda Functions
-  createProjectFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: createProject
-      CodeUri: ./resolvers/createProject
-  getProjectsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: getProjects
-      CodeUri: ./resolvers/getProjects
   # Data Sources
-  createProjectDataSource:
+  apiV4DataSource:
     Type: AWS::AppSync::DataSource
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      Name: createProjectDataSource
-      Type: AWS_LAMBDA
-      ServiceRoleArn: !GetAtt AppSyncServiceRole.Arn
-      LambdaConfig:
-        LambdaFunctionArn: !GetAtt createProjectFunction.Arn
-  getProjectsDataSource:
-    Type: AWS::AppSync::DataSource
-    Properties:
-      ApiId: !GetAtt GraphQLApi.ApiId
-      Name: getProjectsDataSource
+      Name: apiV4DataSource
       Type: HTTP
       ServiceRoleArn: !GetAtt AppSyncServiceRole.Arn
       HttpConfig:
-        Endpoint: "https://a212-2600-1702-cc4-2c00-748c-2fc4-2ce9-cd1e.ngrok-free.app"
+        Endpoint: "https://3c29-2600-1702-cc4-2c00-8c1d-dcfc-189b-17ba.ngrok-free.app"
   # Resolvers
-  createProjectResolver:
+  getCausesResolver:
     Type: AWS::AppSync::Resolver
     Properties:
       ApiId: !GetAtt GraphQLApi.ApiId
-      FieldName: createProject
-      TypeName: Mutation
-      DataSourceName: !GetAtt createProjectDataSource.Name
-      RequestMappingTemplate: '{ "version": "2017-02-28", "operation": "Invoke", "payload": { "arguments": $util.toJson($context.arguments), "identity": $util.toJson($context.identity) } }'
-      ResponseMappingTemplate: $util.toJson($ctx.result)
-  getProjectsResolver:
-    Type: AWS::AppSync::Resolver
-    Properties:
-      ApiId: !GetAtt GraphQLApi.ApiId
-      FieldName: getProjects
+      FieldName: getCauses
       TypeName: Query
       Code: |
         export function request(ctx){
@@ -123,7 +94,7 @@ Resources:
       Runtime:
         Name: APPSYNC_JS
         RuntimeVersion: "1.0.0"
-      DataSourceName: !GetAtt getProjectsDataSource.Name
+      DataSourceName: !GetAtt apiV4DataSource.Name
 
 Outputs:
   ApiUrl:
